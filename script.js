@@ -29,15 +29,15 @@ const playerFactory = (name, symbol) => {
   return {name, symbol}
 }
 
-const player1 = playerFactory('player1', 'x');
-const player2 = playerFactory('player2', 'o');
+const player1 = playerFactory('Player 1', 'x');
+const player2 = playerFactory('Player 2', 'o');
 
 // create a module for gameController
 const gameController = (() => {
   const readyState = false;
   const activePlayer = player1;
-
-  return {readyState, activePlayer};
+  const turnsTaken = 0;
+  return {readyState, activePlayer, turnsTaken};
 })();
 
 console.log(gameController.activePlayer.symbol);
@@ -58,6 +58,8 @@ function renderBoard(gameBoard) {
       space.addEventListener('click', () => {
         if (space.innerHTML == '') {
           space.innerHTML = gameController.activePlayer.symbol;
+          gameBoard.board[i] = gameController.activePlayer.symbol;
+          gameController.turnsTaken ++;
           // swap the active player
           if (gameController.activePlayer == player1) {
             gameController.activePlayer = player2;
@@ -72,4 +74,56 @@ function renderBoard(gameBoard) {
 
 renderBoard(gameBoard);
 
- function checkforWin() {};
+
+// need to look at board array
+// what is minimum amount of plays (by either side) required to win? 5.
+// what are all the possible winning conditions?
+//  0, 1, 2, 
+//  3, 4, 5, 
+//  6, 7, 8 
+// look at the winning combinations, then check for x's and o's in each one. 
+// winning combinations are:
+// HORIZONTAL
+// [0, 1, 2]
+// [3, 4, 5]
+// [6, 7, 8]
+// VERTICAL
+// [0, 3, 6]
+// [1, 4, 7]
+// [2, 5, 8]
+// DIAGONAL
+// [0, 4, 8]
+// [2, 4, 6]
+// run the tests as a single function, pass in the values of x and o
+// if a match is found, pass out the value 
+ function checkEndGame(boardArray) {
+  if (gameController.turnsTaken > 4) {
+    // switch statement?
+    function playerWinCheck(player) {
+      let symbol = player.symbol;
+      if (  
+          // HORIZONTAL
+          (boardArray[0] === symbol && boardArray[1] === symbol && boardArray[2] === symbol) ||
+          (boardArray[3] === symbol && boardArray[4] === symbol && boardArray[5] === symbol) ||
+          (boardArray[6] === symbol && boardArray[7] === symbol && boardArray[8] === symbol) ||
+          // VERTICAL
+          (boardArray[0] === symbol && boardArray[3] === symbol && boardArray[6] === symbol) ||
+          (boardArray[1] === symbol && boardArray[4] === symbol && boardArray[7] === symbol) ||
+          (boardArray[2] === symbol && boardArray[5] === symbol && boardArray[8] === symbol) ||
+          // DIAGONAL
+          (boardArray[0] === symbol && boardArray[4] === symbol && boardArray[8] === symbol) ||
+          (boardArray[2] === symbol && boardArray[4] === symbol && boardArray[6] === symbol)
+          ) 
+          {
+            alert(`${player.name} wins the game!`)
+          }
+      }
+      playerWinCheck(player1);
+      playerWinCheck(player2);
+  }
+ };
+
+ const arr = ['x', 'x', 'x', '']
+ function declareWinner() {
+
+ }
