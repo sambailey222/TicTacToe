@@ -5,8 +5,17 @@ const gameBoard = (() => {
 
   const board = ['', '', '', '', '', '', '', '', ''];
 
+  function resetBoard() {
+      this.board = ['', '', '', '', '', '', '', '', ''];
+      const spaces = document.querySelectorAll(".grid-item");
+      spaces.forEach(space => space.remove());
+      renderBoard(this);
+      gameController.turnsTaken = 0;
+      gameController.gameOver = false;
+  }
+
   return {
-    board
+    board, resetBoard
   };
 })();
 
@@ -22,7 +31,8 @@ console.log(gameBoard);
 // player 1 should go first
 
 
-
+const resetButton = document.getElementById("reset");
+resetButton.addEventListener('click', () => gameBoard.resetBoard());
 
 
 const playerFactory = (name, symbol) => {
@@ -49,6 +59,7 @@ console.log(gameController.activePlayer.symbol);
 // should create 9 divs total and fill them with X's and O's.
 // will need to add CSS classes to make it display as a board and not a line
 const boardDisplay = document.getElementById("board");
+const turnDisplay = document.getElementById("turnDisplay");
 function renderBoard(gameBoard) {
   for (let i = 0; i < gameBoard.board.length; i++) {
       const space = document.createElement("div");
@@ -61,13 +72,17 @@ function renderBoard(gameBoard) {
           space.innerHTML = gameController.activePlayer.symbol;
           gameBoard.board[i] = gameController.activePlayer.symbol;
           gameController.turnsTaken ++;
-          checkEndGame(gameBoard.board);
+          
           // swap the active player
+          
           if (gameController.activePlayer == player1) {
             gameController.activePlayer = player2;
+            turnDisplay.innerHTML = "Your move, Player 2";
           } else {
             gameController.activePlayer = player1;
+            turnDisplay.innerHTML = "Your move, Player 1";
           }
+          checkEndGame(gameBoard.board);
         }
       })
       boardDisplay.appendChild(space);
@@ -99,7 +114,7 @@ renderBoard(gameBoard);
 // run the tests as a single function, pass in the values of x and o
 // if a match is found, pass out the value 
  function checkEndGame(boardArray) {
-  if (gameController.turnsTaken > 4) {
+  if (gameController.turnsTaken > 4 && gameController.gameOver == false) {
     // switch statement?
     function playerWinCheck(player) {
       let symbol = player.symbol;
@@ -117,11 +132,12 @@ renderBoard(gameBoard);
           (boardArray[2] === symbol && boardArray[4] === symbol && boardArray[6] === symbol)
           ) 
           {
-            alert(`${player.name} wins the game!`)
+            turnDisplay.innerHTML = `${player.name} wins the game!`;
             gameController.gameOver = true;
           }
           else if (gameController.turnsTaken === 9)
           {
+            turnDisplay.innerHTML = `It's a tie!`;
             alert(`It's a tie!`);
             gameController.gameOver = true;
           }
@@ -133,7 +149,5 @@ renderBoard(gameBoard);
   }
  };
 
- const arr = ['x', 'x', 'x', '']
- function declareWinner() {
-
- }
+ 
+ 
