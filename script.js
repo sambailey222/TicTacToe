@@ -37,7 +37,8 @@ const gameController = (() => {
   const readyState = false;
   const activePlayer = player1;
   const turnsTaken = 0;
-  return {readyState, activePlayer, turnsTaken};
+  const gameOver = false;
+  return {readyState, activePlayer, turnsTaken, gameOver};
 })();
 
 console.log(gameController.activePlayer.symbol);
@@ -60,6 +61,7 @@ function renderBoard(gameBoard) {
           space.innerHTML = gameController.activePlayer.symbol;
           gameBoard.board[i] = gameController.activePlayer.symbol;
           gameController.turnsTaken ++;
+          checkEndGame(gameBoard.board);
           // swap the active player
           if (gameController.activePlayer == player1) {
             gameController.activePlayer = player2;
@@ -116,10 +118,18 @@ renderBoard(gameBoard);
           ) 
           {
             alert(`${player.name} wins the game!`)
+            gameController.gameOver = true;
+          }
+          else if (gameController.turnsTaken === 9)
+          {
+            alert(`It's a tie!`);
+            gameController.gameOver = true;
           }
       }
       playerWinCheck(player1);
+      if (gameController.gameOver == false) {
       playerWinCheck(player2);
+      }
   }
  };
 
