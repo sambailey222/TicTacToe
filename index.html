@@ -14,7 +14,19 @@
 <body>
   <h1 id="main-title">Tic Tac Toe</h1>
   <h3 id="turnDisplay">Your move, Player 1</h3>
-  <div id="board" class="grid-container"></div>
+  <div id="board-container">
+    <div id="player1ScoreCard" class="scores">
+      <h2>Player 1 Score:</h2>
+      <h2 id="player1Score">0</h2>
+    </div>
+    
+    <div id="board" class="grid-container"></div>
+
+    <div id="player2ScoreCard" class="scores">
+      <h2>Player 2 Score:</h2>
+      <h2 id="player2Score">0</h2>
+    </div>
+  </div>
   <div class="button-container">
     <button id="reset" class="button">Reset</button>
     <button id="restart" class="button">Restart</button>

@@ -12,6 +12,8 @@ const gameBoard = (() => {
       renderBoard(this);
       gameController.turnsTaken = 0;
       gameController.gameOver = false;
+      turnDisplay.innerHTML = "Your move, Player 1";
+      gameController.activePlayer = player1;
   }
 
   return {
@@ -36,7 +38,8 @@ resetButton.addEventListener('click', () => gameBoard.resetBoard());
 
 
 const playerFactory = (name, symbol) => {
-  return {name, symbol}
+  const score = 0;
+  return {name, symbol, score}
 }
 
 const player1 = playerFactory('Player 1', 'x');
@@ -69,20 +72,24 @@ function renderBoard(gameBoard) {
       console.log(space.innerHTML);
       space.addEventListener('click', () => {
         if (space.innerHTML == '') {
-          space.innerHTML = gameController.activePlayer.symbol;
-          gameBoard.board[i] = gameController.activePlayer.symbol;
-          gameController.turnsTaken ++;
-          
-          // swap the active player
-          
-          if (gameController.activePlayer == player1) {
-            gameController.activePlayer = player2;
-            turnDisplay.innerHTML = "Your move, Player 2";
+          if (gameController.gameOver == true) {
+            gameBoard.resetBoard();
           } else {
-            gameController.activePlayer = player1;
-            turnDisplay.innerHTML = "Your move, Player 1";
+            space.innerHTML = gameController.activePlayer.symbol;
+            gameBoard.board[i] = gameController.activePlayer.symbol;
+            gameController.turnsTaken ++;
+            
+            // swap the active player
+            
+            if (gameController.activePlayer == player1) {
+              gameController.activePlayer = player2;
+              turnDisplay.innerHTML = "Your move, Player 2";
+            } else {
+              gameController.activePlayer = player1;
+              turnDisplay.innerHTML = "Your move, Player 1";
+            }
+            checkEndGame(gameBoard.board);
           }
-          checkEndGame(gameBoard.board);
         }
       })
       boardDisplay.appendChild(space);
@@ -113,6 +120,9 @@ renderBoard(gameBoard);
 // [2, 4, 6]
 // run the tests as a single function, pass in the values of x and o
 // if a match is found, pass out the value 
+
+const player1Score = document.getElementById("player1Score");
+const player2Score = document.getElementById("player2Score");
  function checkEndGame(boardArray) {
   if (gameController.turnsTaken > 4 && gameController.gameOver == false) {
     // switch statement?
@@ -133,7 +143,15 @@ renderBoard(gameBoard);
           ) 
           {
             turnDisplay.innerHTML = `${player.name} wins the game!`;
+            player.score ++;
             gameController.gameOver = true;
+            switch (player) {
+              case player1:
+                player1Score.innerHTML = player.score;
+                break;
+              case player2:
+                player2Score.innerHTML = player.score;
+            }
           }
           else if (gameController.turnsTaken === 9)
           {

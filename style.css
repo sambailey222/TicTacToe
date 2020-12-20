@@ -6,7 +6,6 @@
     padding: 10px;
     width: 360px;
     height: 360px;
-    margin: auto;
   }
   .grid-item {
     background-color: rgba(255, 255, 255, 0.8);
@@ -39,3 +38,24 @@
     width: 360px;
     margin: 30px auto;
   }
+
+  #board-container {
+    display:flex;
+    justify-content: space-evenly;
+    width: 85%;
+    margin: auto;
+    font-family: sans-serif;
+  }
+
+#player1ScoreCard {
+  
+}
+
+#player2ScoreCard {
+  
+}
+
+.scores {
+  margin-top: 12%;
+  text-align: center;
+}
