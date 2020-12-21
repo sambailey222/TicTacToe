@@ -12,7 +12,15 @@
 </head>
 
 <body>
-  <h1 id="main-title">Tic Tac Toe</h1>
+  <div id="start-screen">
+    <h1>Tic-Tac-Toe</h1>
+    <h2>Play vs.</h2>
+    <button>Human</button> <br>
+    <button>Computer</button>
+  </div>
+
+  <div id="game-container">
+  <h1 id="main-title">Tic-Tac-Toe</h1>
   <h3 id="turnDisplay">Your move, Player 1</h3>
   <div id="board-container">
     <div id="player1ScoreCard" class="scores">
@@ -28,9 +36,10 @@
     </div>
   </div>
   <div class="button-container">
-    <button id="reset" class="button">Reset</button>
-    <button id="restart" class="button">Restart</button>
+    <button id="reset" class="button">Reset Board</button>
+    <button id="restart" class="button">Restart Game</button>
   </div>
+</div> <!-- / GAME CONTAINER -->
 
   <script src="script.js"></script>
 </body>

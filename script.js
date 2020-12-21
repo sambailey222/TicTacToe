@@ -1,10 +1,10 @@
 // create a module for gameBoard
 // first create gameboard object with array inside
 
+
+
 const gameBoard = (() => {
-
   const board = ['', '', '', '', '', '', '', '', ''];
-
   function resetBoard() {
       this.board = ['', '', '', '', '', '', '', '', ''];
       const spaces = document.querySelectorAll(".grid-item");
@@ -15,7 +15,6 @@ const gameBoard = (() => {
       turnDisplay.innerHTML = "Your move, Player 1";
       gameController.activePlayer = player1;
   }
-
   return {
     board, resetBoard
   };
@@ -37,13 +36,13 @@ const resetButton = document.getElementById("reset");
 resetButton.addEventListener('click', () => gameBoard.resetBoard());
 
 
-const playerFactory = (name, symbol) => {
+const playerFactory = (name, symbol, computer = false) => {
   const score = 0;
-  return {name, symbol, score}
+  return {name, symbol, score, computer}
 }
 
 const player1 = playerFactory('Player 1', 'x');
-const player2 = playerFactory('Player 2', 'o');
+const player2 = playerFactory('Player 2', 'o', true);
 
 // create a module for gameController
 const gameController = (() => {
@@ -77,6 +76,7 @@ function renderBoard(gameBoard) {
           } else {
             space.innerHTML = gameController.activePlayer.symbol;
             gameBoard.board[i] = gameController.activePlayer.symbol;
+            console.log(gameBoard.board);
             gameController.turnsTaken ++;
             
             // swap the active player
@@ -89,6 +89,9 @@ function renderBoard(gameBoard) {
               turnDisplay.innerHTML = "Your move, Player 1";
             }
             checkEndGame(gameBoard.board);
+            if (player2.computer && gameController.gameOver == false) {
+              computerPlay();
+            }
           }
         }
       })
@@ -97,6 +100,7 @@ function renderBoard(gameBoard) {
 }
 
 renderBoard(gameBoard);
+
 
 
 // need to look at board array
@@ -126,6 +130,8 @@ const player2Score = document.getElementById("player2Score");
  function checkEndGame(boardArray) {
   if (gameController.turnsTaken > 4 && gameController.gameOver == false) {
     // switch statement?
+    console.log(boardArray);
+    console.log(gameBoard.board);
     function playerWinCheck(player) {
       let symbol = player.symbol;
       if (  
@@ -143,6 +149,7 @@ const player2Score = document.getElementById("player2Score");
           ) 
           {
             turnDisplay.innerHTML = `${player.name} wins the game!`;
+            console.log(`${player.name} wins the game!`)
             player.score ++;
             gameController.gameOver = true;
             switch (player) {
@@ -167,5 +174,27 @@ const player2Score = document.getElementById("player2Score");
   }
  };
 
- 
+ function computerPlay() {
+  // loop through the array to find an empty space
+  for (let i = 0; i < gameBoard.board.length; i++) {
+    console.log('computer loop has run');
+    console.log(gameBoard.board);
+    console.log(gameBoard.board[i]);
+    if (gameBoard.board[i] == '') {
+      document.getElementById(`space${i}`).innerHTML = gameController.activePlayer.symbol;
+      console.log("innerloop has run");
+      gameBoard.board[i] = gameController.activePlayer.symbol;
+      gameController.turnsTaken ++;
+      gameController.activePlayer = player1;
+      turnDisplay.innerHTML = "Your move, Player 1";
+      console.log("Your move, Player 1");
+      checkEndGame(gameBoard.board);
+      console.log("Computer has played");
+      break;
+    }
+  }
+  // mark that empty space
+  // swap activePlayer to player1
+  // increase turnCount
+}
  
