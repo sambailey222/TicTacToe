@@ -175,26 +175,22 @@ const player2Score = document.getElementById("player2Score");
  };
 
  function computerPlay() {
-  // loop through the array to find an empty space
-  for (let i = 0; i < gameBoard.board.length; i++) {
-    console.log('computer loop has run');
-    console.log(gameBoard.board);
-    console.log(gameBoard.board[i]);
-    if (gameBoard.board[i] == '') {
-      document.getElementById(`space${i}`).innerHTML = gameController.activePlayer.symbol;
-      console.log("innerloop has run");
-      gameBoard.board[i] = gameController.activePlayer.symbol;
-      gameController.turnsTaken ++;
-      gameController.activePlayer = player1;
-      turnDisplay.innerHTML = "Your move, Player 1";
-      console.log("Your move, Player 1");
-      checkEndGame(gameBoard.board);
-      console.log("Computer has played");
-      break;
+  // create a new array of free spaces
+  let choiceArray = [];
+    for (let i = 0; i < gameBoard.board.length; i++) {
+      if (gameBoard.board[i] === "") {
+        choiceArray.push(i);
+      }
     }
+  // pick a random index from that array
+  let randomMoveIndex = Math.floor(Math.random() * choiceArray.length);
+    // make CPU play their move into that spot
+  document.getElementById(`space${choiceArray[randomMoveIndex]}`).innerHTML = gameController.activePlayer.symbol;
+  gameBoard.board[choiceArray[randomMoveIndex]] = gameController.activePlayer.symbol;
+  gameController.turnsTaken ++;
+  gameController.activePlayer = player1;
+  turnDisplay.innerHTML = "Your move, Player 1"; 
+  checkEndGame(gameBoard.board);
   }
-  // mark that empty space
-  // swap activePlayer to player1
-  // increase turnCount
-}
- 
+
+  
