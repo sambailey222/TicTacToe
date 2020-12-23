@@ -61,12 +61,12 @@
 }
 
 #game-container {
-  /* display: none; */
+  display: none;
 }
 
 #start-screen {
   margin-top: 17%;
   text-align: center;
   font-family: sans-serif;
-  display: none;
+  display: block;
 }

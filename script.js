@@ -31,9 +31,13 @@ console.log(gameBoard);
 // active player needs to be kept track of (game controller)
 // player 1 should go first
 
+const player1NameDisplay = document.getElementById("player1Name");
+const player2NameDisplay = document.getElementById("player2Name");
 
 const resetButton = document.getElementById("reset");
 resetButton.addEventListener('click', () => gameBoard.resetBoard());
+const restartButton = document.getElementById("restart");
+restartButton.addEventListener("click", () => gameController.reload());
 
 
 const playerFactory = (name, symbol, computer = false) => {
@@ -41,8 +45,13 @@ const playerFactory = (name, symbol, computer = false) => {
   return {name, symbol, score, computer}
 }
 
+const humanBtn = document.getElementById("human");
+humanBtn.addEventListener("click", () => gameController.assignOpponent("human"));
+const computerBtn = document.getElementById("computer");
+computerBtn.addEventListener("click", () => gameController.assignOpponent("computer"));
+
 const player1 = playerFactory('Player 1', 'x');
-const player2 = playerFactory('Player 2', 'o', true);
+let player2 = null;
 
 // create a module for gameController
 const gameController = (() => {
@@ -50,7 +59,24 @@ const gameController = (() => {
   const activePlayer = player1;
   const turnsTaken = 0;
   const gameOver = false;
-  return {readyState, activePlayer, turnsTaken, gameOver};
+  function assignOpponent(playerType) {
+    if (playerType == "human") {
+      player2 = playerFactory('Player 2', 'o', false);
+    } 
+    else
+    {
+      player2 = playerFactory('Player 2', 'o', true);
+      player1NameDisplay.innerHTML = "Your Score";
+      player2NameDisplay.innerHTML = "CPU Score";
+      turnDisplay.innerHTML = "It's your turn";
+    }
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("game-container").style.display = "block";
+  }
+  function reload() {
+    location.reload();
+  }
+  return {readyState, activePlayer, turnsTaken, gameOver, assignOpponent, reload};
 })();
 
 console.log(gameController.activePlayer.symbol);
@@ -148,8 +174,17 @@ const player2Score = document.getElementById("player2Score");
           (boardArray[2] === symbol && boardArray[4] === symbol && boardArray[6] === symbol)
           ) 
           {
-            turnDisplay.innerHTML = `${player.name} wins the game!`;
-            console.log(`${player.name} wins the game!`)
+            if (player2.computer) {
+              if (player == player2) {
+                turnDisplay.innerHTML = `You lose!`;
+              } else
+              {
+                turnDisplay.innerHTML = `You win!`;
+              }
+            } else {
+              turnDisplay.innerHTML = `${player.name} wins the game!`;
+              console.log(`${player.name} wins the game!`)
+            }
             player.score ++;
             gameController.gameOver = true;
             switch (player) {
@@ -163,7 +198,6 @@ const player2Score = document.getElementById("player2Score");
           else if (gameController.turnsTaken === 9)
           {
             turnDisplay.innerHTML = `It's a tie!`;
-            alert(`It's a tie!`);
             gameController.gameOver = true;
           }
       }
@@ -189,8 +223,8 @@ const player2Score = document.getElementById("player2Score");
   gameBoard.board[choiceArray[randomMoveIndex]] = gameController.activePlayer.symbol;
   gameController.turnsTaken ++;
   gameController.activePlayer = player1;
-  turnDisplay.innerHTML = "Your move, Player 1"; 
+  turnDisplay.innerHTML = "It's your turn"; 
   checkEndGame(gameBoard.board);
   }
 
-  
+ 
