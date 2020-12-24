@@ -1,15 +1,39 @@
+@font-face {
+  font-family: 'starjedi';
+  src: url("fonts/starjedi/Starjedi.ttf")
+}
+
+@font-face {
+  font-family: 'starjhol';
+  src: url("fonts/starjedi/Starjhol.ttf")
+}
+
+@font-face {
+  font-family: 'starjlogo';
+  src: url("fonts/starjedi/Stjldbl1.ttf")
+}
+
+
+body {
+  background-image: url("images/star-bg.jpg");
+  color: #ffd200;
+}
+
+
+
 .grid-container {
     display: grid;
     grid-template-columns: 120px 120px 120px;
     grid-template-rows: 120px 120px 120px;
-    background-color: #2196F3;
-    padding: 10px;
+    background-color: #053c74;
+    border-radius: 10px;
+    padding: 7px;
     width: 360px;
     height: 360px;
   }
   .grid-item {
     background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    border: 3px solid #053c74;
     padding: 10px 10px;
     font-size: 30px;
     text-align: center;
@@ -17,7 +41,15 @@
 
   #main-title {
     text-align: center;
-    font-family: sans-serif;
+    font-family: 'starjedi', sans-serif;
+    font-size: 70px;
+    margin: 0;
+  }
+
+  #subtitle {
+    font-family: 'starjhol', sans-serif;
+    text-align: center;
+    margin: 0;
   }
 
   #turnDisplay {
@@ -60,7 +92,13 @@
   
 }
 
+.scoreName {
+  font-size: 100px;
+  margin: -40px;
+}
+
 .scores {
+  font-family: 'starjedi', sans-serif;
   margin-top: 10%;
   text-align: center;
 }

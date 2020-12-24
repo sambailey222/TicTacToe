@@ -66,8 +66,8 @@ const gameController = (() => {
     else
     {
       player2 = playerFactory('Player 2', 'o', true);
-      player1NameDisplay.innerHTML = "Your Score";
-      player2NameDisplay.innerHTML = "CPU Score";
+      player1NameDisplay.innerHTML = "$";
+      player2NameDisplay.innerHTML = "#";
       turnDisplay.innerHTML = "It's your turn";
     }
     document.getElementById("start-screen").style.display = "none";
@@ -199,9 +199,13 @@ const player2Score = document.getElementById("player2Score");
             if (player2.computer) {
               if (player == player2) {
                 turnDisplay.innerHTML = `You lose!`;
+                const darthWin = new Audio("audio/now.mp3");
+                darthWin.play();
               } else
               {
                 turnDisplay.innerHTML = `You win!`;
+                const obiWin = new Audio("audio/force.mp3");
+                obiWin.play();
               }
             } else {
               if (gameController.activePlayer.symbol === "o") {
