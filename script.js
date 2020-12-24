@@ -93,14 +93,36 @@ function renderBoard(gameBoard) {
       const space = document.createElement("div");
       space.setAttribute("id", `space${i}`);
       space.classList.add("grid-item")
-      space.innerHTML = gameBoard.board[i];
+      const icon = document.createElement("img");
+      space.appendChild(icon);
+      icon.id = gameBoard.board[i];
+      icon.classList.add("icon")
       console.log(space.innerHTML);
       space.addEventListener('click', () => {
-        if (space.innerHTML == '') {
+        console.log(icon.src);
+        if (icon.id == "") {
           if (gameController.gameOver == true) {
             gameBoard.resetBoard();
           } else {
-            space.innerHTML = gameController.activePlayer.symbol;
+              if (gameController.activePlayer.symbol === "x") 
+              {
+                const lightsaber = new Audio("audio/clash.mp3");
+                lightsaber.play();
+                icon.src="images/obiwan-kenobi.svg";
+                console.log("obiwan");
+
+              }
+              else
+              {
+                // const lightsaber2 = new Audio("audio/clash2.mp3");
+                // lightsaber2.play();
+                const lightsaber = new Audio("audio/clash.mp3");
+                lightsaber.play();
+                icon.src="images/darth-vader.svg"
+                console.log("darth");
+              }
+
+            icon.id = gameController.activePlayer.symbol;
             gameBoard.board[i] = gameController.activePlayer.symbol;
             console.log(gameBoard.board);
             gameController.turnsTaken ++;
@@ -182,6 +204,14 @@ const player2Score = document.getElementById("player2Score");
                 turnDisplay.innerHTML = `You win!`;
               }
             } else {
+              if (gameController.activePlayer.symbol === "o") {
+                const obiWin = new Audio("audio/force.mp3");
+                obiWin.play();
+              } else
+              {
+                const darthWin = new Audio("audio/now.mp3");
+                darthWin.play();
+              }
               turnDisplay.innerHTML = `${player.name} wins the game!`;
               console.log(`${player.name} wins the game!`)
             }
@@ -197,6 +227,8 @@ const player2Score = document.getElementById("player2Score");
           }
           else if (gameController.turnsTaken === 9)
           {
+            const lightsaberTie = new Audio("audio/tie.mp3");
+            lightsaberTie.play();
             turnDisplay.innerHTML = `It's a tie!`;
             gameController.gameOver = true;
           }
@@ -219,7 +251,13 @@ const player2Score = document.getElementById("player2Score");
   // pick a random index from that array
   let randomMoveIndex = Math.floor(Math.random() * choiceArray.length);
     // make CPU play their move into that spot
-  document.getElementById(`space${choiceArray[randomMoveIndex]}`).innerHTML = gameController.activePlayer.symbol;
+  if (gameController.activePlayer.symbol === "x") {
+    setTimeout(function(){document.getElementById(`space${choiceArray[randomMoveIndex]}`).firstChild.src = "images/obiwan-kenobi.svg";}, 3000);
+  } else 
+  {
+    setTimeout(function(){document.getElementById(`space${choiceArray[randomMoveIndex]}`).firstChild.src = "images/darth-vader.svg";}, 1000);
+  }
+  
   gameBoard.board[choiceArray[randomMoveIndex]] = gameController.activePlayer.symbol;
   gameController.turnsTaken ++;
   gameController.activePlayer = player1;

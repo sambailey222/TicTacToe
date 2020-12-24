@@ -10,7 +10,7 @@
   .grid-item {
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(0, 0, 0, 0.8);
-    padding: 35px 20px;
+    padding: 10px 10px;
     font-size: 30px;
     text-align: center;
   }
@@ -46,6 +46,11 @@
     margin: auto;
     font-family: sans-serif;
   }
+
+.icon {
+  max-width: 100%;
+  max-height: 100%;
+}
 
 #player1ScoreCard {
   
