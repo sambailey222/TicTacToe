@@ -13,15 +13,23 @@
 
 <body>
   <div id="start-screen">
-    <h1>Tic-Tac-Toe</h1>
-    <h2>Play vs.</h2>
-    <button id="human">Human</button> <br>
-    <button id="computer">Computer</button>
+    <h1 class="main-title">star wars</h1>
+    <h2 class="subtitle">tic tac toe</h2>
+    <h2 style="margin-top: 50px">Choose a side</h2>
+    <div class="button-container">
+    <button id="rebel" class="sw-font button">rebels $</button>
+    <button id="empire" class="sw-font button">empire #</button>
+    </div>
+    <h2>Choose an opponent</h2>
+    <div class="button-container">
+    <button id="human" class="sw-font button">Human</button>
+    <button id="computer" class="sw-font button">Computer</button>
+    </div>
   </div>
 
   <div id="game-container">
-  <h1 id="main-title">star wars</h1>
-  <h2 id="subtitle">tic tac toe</h2>
+  <h1 class="main-title">star wars</h1>
+  <h2 class="subtitle">tic tac toe</h2>
   <h3 id="turnDisplay">Your move, Player 1</h3>
   <div id="board-container">
     <div id="player1ScoreCard" class="scores">
@@ -37,8 +45,8 @@
     </div>
   </div>
   <div class="button-container">
-    <button id="reset" class="button">Reset Board</button>
-    <button id="restart" class="button">Restart Game</button>
+    <button id="reset" class="button-2 sw-font" style="font-size: 21px">Reset Board</button>
+    <button id="restart" class="button-2 sw-font" style="font-size: 21px">Restart Game</button>
   </div>
  
 </div> <!-- / GAME CONTAINER -->

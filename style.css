@@ -19,7 +19,10 @@ body {
   color: #ffd200;
 }
 
-
+.sw-font {
+  font-family: "starjedi", sans-serif;
+  color: #ffd200;
+}
 
 .grid-container {
     display: grid;
@@ -39,16 +42,17 @@ body {
     text-align: center;
   }
 
-  #main-title {
+  .main-title {
     text-align: center;
     font-family: 'starjedi', sans-serif;
     font-size: 70px;
     margin: 0;
   }
 
-  #subtitle {
+  .subtitle {
     font-family: 'starjhol', sans-serif;
     text-align: center;
+    font-size: 27px;
     margin: 0;
   }
 
@@ -58,16 +62,48 @@ body {
   }
 
   .button {
-    /* margin: auto; */
-    
+    margin: auto;
+    border: 2px solid #ffd200;
+    background-color: transparent;
+    border-radius: 5px;
+    width: 200px;
+    font-size: 27px;
   }
+
+  .button-2 {
+    margin: auto;
+    border: 2px solid #ffd200;
+    background-color: transparent;
+    border-radius: 5px;
+    width: 200px;
+    font-size: 21px;
+  }
+
+  .button:hover {
+    border-color: white;
+    color: white;
+  }
+
+  .button:focus {
+    color: white;
+  }
+
+  .button-2:hover {
+    border-color: white;
+    color: white;
+  }
+
+  .button-2:focus {
+    outline: none;
+  }
+
 
   .button-container {
     display: flex;
     margin-top: 30px;
     text-align: center;
     justify-content: space-evenly;
-    width: 360px;
+    width: 500px;
     margin: 30px auto;
   }
 
@@ -108,7 +144,7 @@ body {
 }
 
 #start-screen {
-  margin-top: 17%;
+  margin-top: 10%;
   text-align: center;
   font-family: sans-serif;
   display: block;
