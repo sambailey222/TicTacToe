@@ -16,6 +16,7 @@
 
 body {
   background-image: url("images/star-bg.jpg");
+  background-color: black;
   color: #ffd200;
 }
 
@@ -107,6 +108,10 @@ body {
     margin: 30px auto;
   }
 
+  #startGame {
+    margin-top: 40px;
+  }
+
   #board-container {
     display:flex;
     justify-content: space-evenly;
@@ -144,7 +149,7 @@ body {
 }
 
 #start-screen {
-  margin-top: 10%;
+  margin-top: 4%;
   text-align: center;
   font-family: sans-serif;
   display: block;

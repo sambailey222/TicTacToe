@@ -2,6 +2,13 @@
 // first create gameboard object with array inside
 
 
+// only initialise players based on selection
+// each start screen button should store values for player object (side)
+// player to go first should be whichever side the user picks
+// icon should be stored in the player object
+// there should be a start button that triggers the game
+
+
 
 const gameBoard = (() => {
   const board = ['', '', '', '', '', '', '', '', ''];
@@ -39,47 +46,78 @@ resetButton.addEventListener('click', () => gameBoard.resetBoard());
 const restartButton = document.getElementById("restart");
 restartButton.addEventListener("click", () => gameController.reload());
 
+let player1 = null;
+let player2 = null;
 
-const playerFactory = (name, symbol, computer = false) => {
+const playerFactory = (name, symbol, icon, computer = false) => {
+  let winAudio = null;
+  if (icon === "rebels") {
+    icon = "images/obiwan-kenobi.svg";
+    winAudio = new Audio("audio/force.mp3");
+  } else {
+    icon = "images/darth-vader.svg"
+    winAudio = new Audio("audio/now.mp3");
+  }
   const score = 0;
-  return {name, symbol, score, computer}
+  return {name, symbol, icon, score, computer, winAudio}
 }
+
+const rebelBtn = document.getElementById("rebel");
+rebelBtn.addEventListener("click", () => gameController.assignPlayers("rebels"));
+const empireBtn = document.getElementById("empire");
+empireBtn.addEventListener("click", () => gameController.assignPlayers("empire"));
 
 const humanBtn = document.getElementById("human");
 humanBtn.addEventListener("click", () => gameController.assignOpponent("human"));
 const computerBtn = document.getElementById("computer");
 computerBtn.addEventListener("click", () => gameController.assignOpponent("computer"));
 
-const player1 = playerFactory('Player 1', 'x');
-let player2 = null;
+const startBtn = document.getElementById("startGame");
+startBtn.addEventListener("click", () => gameController.startGame());
 
 // create a module for gameController
 const gameController = (() => {
-  const readyState = false;
-  const activePlayer = player1;
+  let gameStart = false;
+  let activePlayer = null;
   const turnsTaken = 0;
   const gameOver = false;
-  function assignOpponent(playerType) {
-    if (playerType == "human") {
-      player2 = playerFactory('Player 2', 'o', false);
+  function assignPlayers(side) {
+    if (side == "rebels") {
+      player1 = playerFactory('Rebels', 'x', 'rebels');
+      player2 = playerFactory('Empire', 'o', 'empire');
+      player1NameDisplay.innerHTML = "$";
+      player2NameDisplay.innerHTML = "#";
+      turnDisplay.innerHTML = "It's the Rebellion's turn";
     } 
     else
     {
-      player2 = playerFactory('Player 2', 'o', true);
-      player1NameDisplay.innerHTML = "$";
-      player2NameDisplay.innerHTML = "#";
-      turnDisplay.innerHTML = "It's your turn";
+      player1 = playerFactory('Empire', 'x', 'empire');
+      player2 = playerFactory('Rebels', 'o', 'rebels');
+      player1NameDisplay.innerHTML = "#";
+      player2NameDisplay.innerHTML = "$";
+      turnDisplay.innerHTML = "It's the Empire's turn";
     }
+  };
+  function assignOpponent(type) {
+    if (type === "computer") {
+      player2.computer = true;
+    } else {
+      player2.computer = false;
+    }
+  }
+  function startGame() {
     document.getElementById("start-screen").style.display = "none";
     document.getElementById("game-container").style.display = "block";
-  }
+    this.activePlayer = player1;
+    gameStart = true;
+  };
   function reload() {
     location.reload();
   }
-  return {readyState, activePlayer, turnsTaken, gameOver, assignOpponent, reload};
+  return {gameStart, activePlayer, turnsTaken, gameOver, assignPlayers, assignOpponent, startGame, reload};
 })();
 
-console.log(gameController.activePlayer.symbol);
+// console.log(gameController.activePlayer.symbol);
 // create a facotry for players
 
 
@@ -104,29 +142,33 @@ function renderBoard(gameBoard) {
           if (gameController.gameOver == true) {
             gameBoard.resetBoard();
           } else {
-              if (gameController.activePlayer.symbol === "x") 
-              {
-                const lightsaber = new Audio("audio/clash.mp3");
-                lightsaber.play();
-                icon.src="images/obiwan-kenobi.svg";
-                console.log("obiwan");
+              icon.src = gameController.activePlayer.icon;
 
-              }
-              else
-              {
-                // const lightsaber2 = new Audio("audio/clash2.mp3");
-                // lightsaber2.play();
-                const lightsaber = new Audio("audio/clash.mp3");
-                lightsaber.play();
-                icon.src="images/darth-vader.svg"
-                console.log("darth");
-              }
 
+              // if (gameController.activePlayer.symbol === "x") 
+              // {
+              //   const lightsaber = new Audio("audio/clash.mp3");
+              //   lightsaber.play();
+              //   icon.src="images/obiwan-kenobi.svg";
+              //   console.log("obiwan");
+
+              // }
+              // else
+              // {
+              //   // const lightsaber2 = new Audio("audio/clash2.mp3");
+              //   // lightsaber2.play();
+              //   const lightsaber = new Audio("audio/clash.mp3");
+              //   lightsaber.play();
+              //   icon.src="images/darth-vader.svg"
+              //   console.log("darth");
+              // }
+            
             icon.id = gameController.activePlayer.symbol;
             gameBoard.board[i] = gameController.activePlayer.symbol;
             console.log(gameBoard.board);
             gameController.turnsTaken ++;
-            
+            const lightsaber = new Audio("audio/clash.mp3");
+            lightsaber.play();
             // swap the active player
             
             if (gameController.activePlayer == player1) {
@@ -173,6 +215,8 @@ renderBoard(gameBoard);
 // run the tests as a single function, pass in the values of x and o
 // if a match is found, pass out the value 
 
+
+
 const player1Score = document.getElementById("player1Score");
 const player2Score = document.getElementById("player2Score");
  function checkEndGame(boardArray) {
@@ -199,17 +243,15 @@ const player2Score = document.getElementById("player2Score");
             if (player2.computer) {
               if (player == player2) {
                 turnDisplay.innerHTML = `You lose!`;
-                const darthWin = new Audio("audio/now.mp3");
-                darthWin.play();
+                player.winAudio.play();
               } else
               {
                 turnDisplay.innerHTML = `You win!`;
-                const obiWin = new Audio("audio/force.mp3");
-                obiWin.play();
+                player.winAudio.play();
               }
             } else {
               if (gameController.activePlayer.symbol === "o") {
-                const obiWin = new Audio("audio/force.mp3");
+                
                 obiWin.play();
               } else
               {
@@ -255,12 +297,9 @@ const player2Score = document.getElementById("player2Score");
   // pick a random index from that array
   let randomMoveIndex = Math.floor(Math.random() * choiceArray.length);
     // make CPU play their move into that spot
-  if (gameController.activePlayer.symbol === "x") {
-    setTimeout(function(){document.getElementById(`space${choiceArray[randomMoveIndex]}`).firstChild.src = "images/obiwan-kenobi.svg";}, 3000);
-  } else 
-  {
-    setTimeout(function(){document.getElementById(`space${choiceArray[randomMoveIndex]}`).firstChild.src = "images/darth-vader.svg";}, 1000);
-  }
+ 
+  setTimeout(function(){document.getElementById(`space${choiceArray[randomMoveIndex]}`).firstChild.src = player2.icon;}, 1000);
+
   
   gameBoard.board[choiceArray[randomMoveIndex]] = gameController.activePlayer.symbol;
   gameController.turnsTaken ++;
