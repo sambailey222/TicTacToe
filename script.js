@@ -19,7 +19,7 @@ const gameBoard = (() => {
       renderBoard(this);
       gameController.turnsTaken = 0;
       gameController.gameOver = false;
-      turnDisplay.innerHTML = "Your move, Player 1";
+      // turnDisplay.innerHTML = "Your move, Player 1";
       gameController.activePlayer = player1;
   }
   return {
@@ -83,7 +83,7 @@ const gameController = (() => {
   const gameOver = false;
   function assignPlayers(side) {
     if (side == "rebels") {
-      player1 = playerFactory('Rebels', 'x', 'rebels');
+      player1 = playerFactory('Rebellion', 'x', 'rebels');
       player2 = playerFactory('Empire', 'o', 'empire');
       player1NameDisplay.innerHTML = "$";
       player2NameDisplay.innerHTML = "#";
@@ -92,7 +92,7 @@ const gameController = (() => {
     else
     {
       player1 = playerFactory('Empire', 'x', 'empire');
-      player2 = playerFactory('Rebels', 'o', 'rebels');
+      player2 = playerFactory('Rebellion', 'o', 'rebels');
       player1NameDisplay.innerHTML = "#";
       player2NameDisplay.innerHTML = "$";
       turnDisplay.innerHTML = "It's the Empire's turn";
@@ -170,14 +170,19 @@ function renderBoard(gameBoard) {
             const lightsaber = new Audio("audio/clash.mp3");
             lightsaber.play();
             // swap the active player
-            
             if (gameController.activePlayer == player1) {
               gameController.activePlayer = player2;
-              turnDisplay.innerHTML = "Your move, Player 2";
             } else {
               gameController.activePlayer = player1;
-              turnDisplay.innerHTML = "Your move, Player 1";
             }
+            // change the turn text
+            if (gameController.activePlayer.name == 'Rebellion') 
+            {
+              turnDisplay.innerHTML = "It's the Rebellion's turn";
+            } else {
+              turnDisplay.innerHTML = "It's the Empire's turn";
+            }
+
             checkEndGame(gameBoard.board);
             if (player2.computer && gameController.gameOver == false) {
               computerPlay();
@@ -240,27 +245,21 @@ const player2Score = document.getElementById("player2Score");
           (boardArray[2] === symbol && boardArray[4] === symbol && boardArray[6] === symbol)
           ) 
           {
-            if (player2.computer) {
-              if (player == player2) {
-                turnDisplay.innerHTML = `You lose!`;
-                player.winAudio.play();
-              } else
-              {
-                turnDisplay.innerHTML = `You win!`;
-                player.winAudio.play();
-              }
-            } else {
-              if (gameController.activePlayer.symbol === "o") {
-                
-                obiWin.play();
-              } else
-              {
-                const darthWin = new Audio("audio/now.mp3");
-                darthWin.play();
-              }
-              turnDisplay.innerHTML = `${player.name} wins the game!`;
-              console.log(`${player.name} wins the game!`)
-            }
+            // if 
+            // // (player2.computer) {
+            // //   if (player == player2) {
+            // //     turnDisplay.innerHTML = `You lose!`;
+            // //     player.winAudio.play();
+            // //   } else
+            // //   {
+            // //     turnDisplay.innerHTML = `You win!`;
+            // //     player.winAudio.play();
+            // //   }
+            // // } else 
+            // {
+            player.winAudio.play();
+            turnDisplay.innerHTML = `${player.name} wins the game!`;
+            console.log(`${player.name} wins the game!`)
             player.score ++;
             gameController.gameOver = true;
             switch (player) {
@@ -270,21 +269,22 @@ const player2Score = document.getElementById("player2Score");
               case player2:
                 player2Score.innerHTML = player.score;
             }
-          }
-          else if (gameController.turnsTaken === 9)
+          
+          if (gameController.turnsTaken === 9)
           {
             const lightsaberTie = new Audio("audio/tie.mp3");
             lightsaberTie.play();
             turnDisplay.innerHTML = `It's a tie!`;
             gameController.gameOver = true;
-          }
-      }
-      playerWinCheck(player1);
-      if (gameController.gameOver == false) {
-      playerWinCheck(player2);
-      }
-  }
- };
+          } // / tiecheck
+        } // /if statement within playerWinCheck
+    } // /playerWinCheck
+        playerWinCheck(player1);
+        if (gameController.gameOver == false) {
+        playerWinCheck(player2);
+        } // /second playerwincheck
+    } // /if statement within checkEndGame
+  }; // /checkEndGame
 
  function computerPlay() {
   // create a new array of free spaces
@@ -304,7 +304,7 @@ const player2Score = document.getElementById("player2Score");
   gameBoard.board[choiceArray[randomMoveIndex]] = gameController.activePlayer.symbol;
   gameController.turnsTaken ++;
   gameController.activePlayer = player1;
-  turnDisplay.innerHTML = "It's your turn"; 
+  turnDisplay.innerHTML = `It's the ${player1.name}'s turn`; 
   checkEndGame(gameBoard.board);
   }
 
