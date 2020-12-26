@@ -158,3 +158,55 @@ body {
   font-family: sans-serif;
   display: block;
 }
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  /* #start-screen { 
+    width: 100%;
+  }; */
+
+  /* .button-container {
+    display: block;
+    width: 100%;
+  }; */
+
+}
+
+@media only screen and (max-width: 768px) {
+.button-container {
+  display: block;
+  width: 100%;
+}
+
+#empire, #computer {
+  margin-top: 20px;
+}
+
+#board-container {
+  display: block;
+}
+
+.grid-container {
+  margin: auto;
+}
+
+}
+
+@media only screen and (max-width: 412px) {
+
+  #board-container {
+    width: 100%;
+  }
+
+  .grid-container {
+    width: 260px;
+    height: 260px;
+    grid-template-columns: 86px 86px 86px;
+    grid-template-rows: 86px 86px 86px;
+  }
+
+  #reset {
+    margin-bottom: 10px;
+  }
+
+}
