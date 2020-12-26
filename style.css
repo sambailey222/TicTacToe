@@ -112,9 +112,15 @@ body {
     margin: 30px auto;
   }
 
-  #startGame {
+  #errorMessage {
     margin-top: 40px;
   }
+
+  #startGame {
+    margin-top: 10px;
+  }
+
+ 
 
   #board-container {
     display:flex;
