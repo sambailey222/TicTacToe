@@ -23,7 +23,8 @@ const gameBoard = (() => {
       renderBoard(this);
       gameController.turnsTaken = 0;
       gameController.gameOver = false;
-      // turnDisplay.innerHTML = "Your move, Player 1";
+      gameController.activePlayer = player1;
+      turnDisplay.innerHTML = `It's the ${gameController.activePlayer.name}'s turn.`;
       gameController.activePlayer = player1;
   }
   return {
@@ -280,21 +281,21 @@ const player2Score = document.getElementById("player2Score");
               case player2:
                 player2Score.innerHTML = player.score;
             }
-          
-          if (gameController.turnsTaken === 9)
+          }
+           else if (gameController.turnsTaken === 9)
           {
             const lightsaberTie = new Audio("audio/tie.mp3");
             lightsaberTie.play();
             turnDisplay.innerHTML = `It's a tie!`;
             gameController.gameOver = true;
           } // / tiecheck
-        } // /if statement within playerWinCheck
+         
     } // /playerWinCheck
         playerWinCheck(player1);
         if (gameController.gameOver == false) {
         playerWinCheck(player2);
         } // /second playerwincheck
-    } // /if statement within checkEndGame
+      } // /if statement within checkEndGame
   }; // /checkEndGame
 
  function computerPlay() {
