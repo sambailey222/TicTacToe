@@ -8,6 +8,10 @@
 // icon should be stored in the player object
 // there should be a start button that triggers the game
 
+// TODO
+// sort out css for mobiles
+// tidy up the code (put any variables in modules/factory functions)
+// write a readme
 
 
 const gameBoard = (() => {
@@ -63,14 +67,16 @@ const playerFactory = (name, symbol, icon, computer = false) => {
 }
 
 const rebelBtn = document.getElementById("rebel");
-rebelBtn.addEventListener("click", () => gameController.assignPlayers("rebels"));
+rebelBtn.addEventListener("click", (e) => gameController.assignPlayers(e, "rebels"));
 const empireBtn = document.getElementById("empire");
-empireBtn.addEventListener("click", () => gameController.assignPlayers("empire"));
+empireBtn.addEventListener("click", (e) => gameController.assignPlayers(e, "empire"));
 
+
+// (e) => {console.log(e)}
 const humanBtn = document.getElementById("human");
-humanBtn.addEventListener("click", () => gameController.assignOpponent("human"));
+humanBtn.addEventListener("click", (e) => gameController.assignOpponent(e, "human"));
 const computerBtn = document.getElementById("computer");
-computerBtn.addEventListener("click", () => gameController.assignOpponent("computer"));
+computerBtn.addEventListener("click", (e) => gameController.assignOpponent(e, "computer"));
 
 const startBtn = document.getElementById("startGame");
 startBtn.addEventListener("click", () => gameController.startGame());
@@ -81,7 +87,10 @@ const gameController = (() => {
   let activePlayer = null;
   const turnsTaken = 0;
   const gameOver = false;
-  function assignPlayers(side) {
+  function assignPlayers(e, side) {
+    console.log(e);
+    e.target.parentNode.querySelectorAll('.button').forEach(child => child.classList.remove('active'));
+    e.target.classList.add('active');
     if (side == "rebels") {
       player1 = playerFactory('Rebellion', 'x', 'rebels');
       player2 = playerFactory('Empire', 'o', 'empire');
@@ -98,7 +107,9 @@ const gameController = (() => {
       turnDisplay.innerHTML = "It's the Empire's turn";
     }
   };
-  function assignOpponent(type) {
+  function assignOpponent(e, type) {
+    e.target.parentNode.querySelectorAll('.button').forEach(child => child.classList.remove('active'));
+    e.target.classList.add('active');
     if (type === "computer") {
       player2.computer = true;
     } else {

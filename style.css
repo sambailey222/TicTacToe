@@ -98,6 +98,10 @@ body {
     outline: none;
   }
 
+  .active {
+    border-color: white;
+    color: white;
+  }
 
   .button-container {
     display: flex;
