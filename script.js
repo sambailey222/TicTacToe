@@ -1,9 +1,3 @@
-
-// TODO
-// sort out css for mobiles
-// tidy up the code (put any variables in modules/factory functions)
-// write a readme
-
 // gameboard module
 const gameBoard = (() => {
   const board = ['', '', '', '', '', '', '', '', ''];
@@ -115,20 +109,21 @@ const gameController = (() => {
   const empireBtn = document.getElementById("empire");
   empireBtn.addEventListener("click", (e) => gameController.assignPlayers(e, "empire"));
 
-  // when player chooses an opponent type, make player 2 human or AI accordingly
+  // when player chooses an opponent type, make the corresponding button 'active' (will be checked on game start)
   const humanBtn = document.getElementById("human");
-  humanBtn.addEventListener("click", (e) => gameController.assignOpponent(e, "human"));
+  humanBtn.addEventListener("click", (e) => gameController.assignOpponent(e));
   const computerBtn = document.getElementById("computer");
-  computerBtn.addEventListener("click", (e) => gameController.assignOpponent(e, "computer"));
+  computerBtn.addEventListener("click", (e) => gameController.assignOpponent(e));
 
   // begin the game
   const startBtn = document.getElementById("startGame");
   startBtn.addEventListener("click", () => gameController.startGame());
 
   function assignPlayers(e, side) {
-    console.log(e);
+    // remove 'active' highlight from both buttons, then highlight the targeted one
     e.target.parentNode.querySelectorAll('.button').forEach(child => child.classList.remove('active'));
     e.target.classList.add('active');
+    // set Rebels or Empire to players 1 and 2 respectively
     if (side == "rebels") {
       this.player1 = playerFactory('Rebellion', 'x', 'rebels');
       this.player2 = playerFactory('Empire', 'o', 'empire');
@@ -146,53 +141,54 @@ const gameController = (() => {
     }
   };
 
-  function assignOpponent(e, type) {
+  function assignOpponent(e) {
     e.target.parentNode.querySelectorAll('.button').forEach(child => child.classList.remove('active'));
     e.target.classList.add('active');
   };
 
   function startGame() {
-    const alignmentActiveArray = document.getElementById("alignment").querySelectorAll('.active')
-    const playerTypeActiveArray = document.getElementById("playerType").querySelectorAll('.active')
-    console.log(alignmentActiveArray);
-    console.log(alignmentActiveArray.length === 0);
-    const playerType = document.getElementById("playerType");
+    // check to see if one of the buttons has been highlighted in each case
+    const alignmentActiveArray = document.getElementById("alignment").querySelectorAll('.active');
+    const playerTypeActiveArray = document.getElementById("playerType").querySelectorAll('.active');
     const errorDiv = document.getElementById("errorMessage");
-    console.log(errorDiv.childNodes.length);
     const error = document.createElement("h2");
-    if (errorDiv.childNodes.length > 0) {
+    if (errorDiv.hasChildNodes()) {
       errorDiv.removeChild(errorDiv.firstChild);
     }
+    // do not allow game start if player has not selected a side
     if (alignmentActiveArray.length === 0) {
-      // do not let player start the game and give error message
-      
       error.textContent = "You must choose a side to begin!"
       errorDiv.appendChild(error);
     } 
+    // do not allow game start if player has not selected an opponent
     else if (playerTypeActiveArray.length === 0) 
     {
-      // do not let player start the game and give error message
       error.textContent = "You must choose an opponent to begin!"
       errorDiv.appendChild(error);
     } 
+    // begin the game if above conditions are met
     else 
     {
+      // make opponent computer if computer button highlighted, otherwise will default to human
       if (computer.classList.contains('active')) 
       {
         gameController.player2.computer = true;
       }
-    document.getElementById("start-screen").style.display = "none";
-    document.getElementById("game-container").style.display = "block";
-    this.activePlayer = gameController.player1;
-    gameStart = true;
-    gameBoard.renderBoard(gameBoard);
+      // replace start screen with gameboard
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("game-container").style.display = "block";
+      this.activePlayer = gameController.player1;
+      gameStart = true;
+      gameBoard.renderBoard(gameBoard);
     }
   };
 
+  // reload the page (reset the game)
   function reload() {
     location.reload();
   };
 
+  // computer "AI"
   function computerPlay() {
     // create a new array of free spaces
     let choiceArray = [];
@@ -203,12 +199,11 @@ const gameController = (() => {
       }
     // pick a random index from that array
     let randomMoveIndex = Math.floor(Math.random() * choiceArray.length);
-      // make CPU play their move into that spot
-   
+      
+    // make CPU play their move into that spot after 1 second
     setTimeout(function(){document.getElementById(`space${choiceArray[randomMoveIndex]}`).firstChild.src = gameController.player2.icon;}, 1000);
-  
-    
     gameBoard.board[choiceArray[randomMoveIndex]] = gameController.activePlayer.symbol;
+
     gameController.turnsTaken ++;
     gameController.activePlayer = gameController.player1;
     turnDisplay.innerHTML = `It's the ${gameController.player1.name}'s turn`; 
@@ -216,37 +211,36 @@ const gameController = (() => {
     }
 
   function checkEndGame(boardArray) {
+    // if it is possible for someone to win at this point, proceed
     if (gameController.turnsTaken > 4 && gameController.gameOver == false) {
-      // switch statement?
-      console.log(boardArray);
-      console.log(gameBoard.board);
+    
       function playerWinCheck(player) {
         let symbol = player.symbol;
         if (  
-            // HORIZONTAL
+            // HORIZONTAL WIN CONDITIONS
             (boardArray[0] === symbol && boardArray[1] === symbol && boardArray[2] === symbol) ||
             (boardArray[3] === symbol && boardArray[4] === symbol && boardArray[5] === symbol) ||
             (boardArray[6] === symbol && boardArray[7] === symbol && boardArray[8] === symbol) ||
-            // VERTICAL
+            // VERTICAL WIN CONDITIONS
             (boardArray[0] === symbol && boardArray[3] === symbol && boardArray[6] === symbol) ||
             (boardArray[1] === symbol && boardArray[4] === symbol && boardArray[7] === symbol) ||
             (boardArray[2] === symbol && boardArray[5] === symbol && boardArray[8] === symbol) ||
-            // DIAGONAL
+            // DIAGONAL WIN CONDITIONS
             (boardArray[0] === symbol && boardArray[4] === symbol && boardArray[8] === symbol) ||
             (boardArray[2] === symbol && boardArray[4] === symbol && boardArray[6] === symbol)
             ) 
             {
               player.winAudio.play();
               turnDisplay.innerHTML = `${player.name} wins the game!`;
-              console.log(`${player.name} wins the game!`)
               player.score ++;
               gameController.gameOver = true;
+              // increment the winning player's score
               switch (player) {
                 case gameController.player1:
                   gameBoard.player1Score.innerHTML = player.score;
                   break;
                 case gameController.player2:
-                  player2Score.innerHTML = player.score;
+                  gameBoard.player2Score.innerHTML = player.score;
               }
             }
              else if (gameController.turnsTaken === 9)
@@ -255,17 +249,17 @@ const gameController = (() => {
               lightsaberTie.play();
               turnDisplay.innerHTML = `It's a tie!`;
               gameController.gameOver = true;
-            } // / tiecheck  
+            } // /tiecheck  
       } // /playerWinCheck
-          playerWinCheck(gameController.player1);
-          if (gameController.gameOver == false) {
-          playerWinCheck(gameController.player2);
-          } // /second playerwincheck
-        } // /if statement within checkEndGame
-    }; // /checkEndGame
+      playerWinCheck(gameController.player1);
+      if (gameController.gameOver == false) {
+      playerWinCheck(gameController.player2);
+      } // /second playerwincheck
+    } // /if statement within checkEndGame
+  }; // /checkEndGame
   
-
-  return {gameStart, activePlayer, player1, player2, turnsTaken, gameOver, assignPlayers, assignOpponent, startGame, reload, computerPlay, checkEndGame};
+  return {gameStart, activePlayer, player1, player2, turnsTaken, gameOver, 
+    assignPlayers, assignOpponent, startGame, reload, computerPlay, checkEndGame};
 })();
 
 
