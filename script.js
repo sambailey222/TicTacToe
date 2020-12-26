@@ -72,7 +72,7 @@ const gameBoard = (() => {
       gameController.turnsTaken = 0;
       gameController.gameOver = false;
       gameController.activePlayer = gameController.player1;
-      turnDisplay.innerHTML = `It's the ${gameController.activePlayer.name}'s turn.`;
+      turnDisplay.innerHTML = `It's the ${gameController.activePlayer.name}'s turn`;
   }
   return {
     board, player1NameDisplay, player2NameDisplay, player1Score, player2Score, boardDisplay, turnDisplay, renderBoard, resetBoard
